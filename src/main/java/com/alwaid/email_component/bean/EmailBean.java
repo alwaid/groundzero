@@ -1,5 +1,9 @@
 package com.alwaid.email_component.bean;
 
+import java.io.IOException;
+
+import javax.mail.MessagingException;
+
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
@@ -19,7 +23,7 @@ public class EmailBean implements IEmailBean {
 	private String body;
 
 	@Autowired
-	IEmailService emailService;
+	private IEmailService emailService;
 
 	public String getSubject() {
 		return subject;
@@ -77,26 +81,34 @@ public class EmailBean implements IEmailBean {
 		this.body = body;
 	}
 
-	public boolean sendMail() {
+	public boolean sendMail() throws IOException, MessagingException {
 		boolean isSentMail = false;
 
-		if (StringUtils.isNotBlank(this.TOs)
-				&& StringUtils.isNotBlank(this.subject)
-				&& StringUtils.isNotBlank(this.body)) {
-			emailService.sendMail(this.TOs, this.subject, this.body);
-			isSentMail = true;
-		} else if (StringUtils.isNotBlank(this.CCs)
-				&& StringUtils.isNoneBlank(this.BCCs)
+		if (StringUtils.isNotBlank(this.CCs)
+				&& StringUtils.isNotBlank(this.BCCs)
 				&& StringUtils.isNotBlank(this.filePath)
 				&& StringUtils.isNotBlank(this.fileName)) {
-			emailService.sendMail(this.TOs, this.CCs, this.BCCs, this.subject,
-					this.body, this.filePath, this.fileName);
+			getEmailService().sendMail(this.TOs, this.CCs, this.BCCs,
+					this.subject, this.body, this.filePath, this.fileName);
+			isSentMail = true;
+		} else if (StringUtils.isNotBlank(this.TOs)
+				&& StringUtils.isNotBlank(this.subject)
+				&& StringUtils.isNotBlank(this.body)) {
+			getEmailService().sendMail(this.TOs, this.subject, this.body);
 			isSentMail = true;
 		} else {
 			isSentMail = false;
 		}
 
 		return isSentMail;
+	}
+
+	public IEmailService getEmailService() {
+		return emailService;
+	}
+
+	public void setEmailService(IEmailService emailService) {
+		this.emailService = emailService;
 	}
 
 }

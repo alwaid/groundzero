@@ -1,9 +1,15 @@
+import java.io.IOException;
+
+import javax.mail.MessagingException;
+
 import org.junit.Test;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 import com.alwaid.email_component.bean.EmailBean;
 import com.alwaid.email_component.bean.IEmailBean;
+import com.alwaid.email_component.service.EmailServiceImpl;
+import com.alwaid.email_component.service.IEmailService;
 
 import static org.junit.Assert.*;
 
@@ -16,13 +22,23 @@ import static org.junit.Assert.*;
 public class EmailServiceTest {
 	@Test
 	public void testEmailService() {
-		ApplicationContext context = new ClassPathXmlApplicationContext(
-				"classpath*:**/applicationContext*.xml");
-		IEmailBean emailBean = context.getBean(EmailBean.class);
-		emailBean.setTOs("mail2soumit@gmail.com");
-		emailBean.setSubject("Hello from jUnit");
-		emailBean.setBody("Testing by jUnit");
-
-		assertTrue("Mail should successfully sent", emailBean.sendMail());
+		// ApplicationContext context = new ClassPathXmlApplicationContext(
+		// "classpath*:**/applicationContext*.xml");
+		// IEmailBean emailBean = context.getBean(EmailBean.class);
+		try {
+			IEmailService emailService = new EmailServiceImpl();
+			IEmailBean emailBean = new EmailBean();
+			emailBean.setEmailService(emailService);
+			emailBean.setTOs("debpal07@gmail.com");
+			emailBean.setSubject("Hello from jUnit");
+			emailBean.setBody("Testing by jUnit");
+			assertTrue("Mail should successfully sent", emailBean.sendMail());
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (MessagingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 }

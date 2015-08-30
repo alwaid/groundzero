@@ -1,5 +1,11 @@
 package com.alwaid.email_component.bean;
 
+import java.io.IOException;
+
+import javax.mail.MessagingException;
+
+import com.alwaid.email_component.service.IEmailService;
+
 public interface IEmailBean {
 	public void setSubject(String subject);
 
@@ -29,5 +35,9 @@ public interface IEmailBean {
 
 	public String getBody();
 
-	public boolean sendMail();
+	public boolean sendMail() throws IOException, MessagingException;
+
+	public IEmailService getEmailService();
+
+	public void setEmailService(IEmailService emailService);
 }

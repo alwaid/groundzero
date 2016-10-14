@@ -1,6 +1,7 @@
 package com.alwaid.email_component.bean;
 
 import java.io.IOException;
+import java.io;
 
 import javax.mail.MessagingException;
 
